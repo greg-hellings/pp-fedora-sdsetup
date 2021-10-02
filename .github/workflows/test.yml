@@ -1,0 +1,46 @@
+name: Run build
+
+"on":
+  push:
+    paths-ignored:
+      - README.md
+      - COPYING
+  pull_request:
+  release:
+    types:
+      - published
+      - prereleased
+  workflow_dispatch:  # Allows manually triggering
+
+env:
+  PP_IMAGE: /dev/loop10
+  FED_IMAGE: /dev/loop11
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Makes extra disk space
+        uses: greg-hellings/make-space@v1
+      - name: Install necessary tools
+        run: |
+          sudo apt update
+          sudo apt install -yy systemd-container qemu-user-static u-boot-tools btrfs-progs dosfstools xz-utils sssd
+          sudo service sssd start
+      - name: Download files
+        run: |
+          set -ex -o pipefail
+          source .env
+          wget https://xff.cz/kernels/5.13/pp.tar.gz -O pp.tar.gz
+          tar xf pp.tar.gz
+          FEDORA_RAW_VER=$(wget -q $FEDORA_RAW_SOURCE -O - | grep -Po '(?<=Fedora-Minimal-Rawhide-).*?(?=.aarch64)' | head -n 1)
+          FEDORA_RAW_FILE=Fedora-Minimal-Rawhide-$FEDORA_RAW_VER.aarch64.raw.xz
+          wget $FEDORA_RAW_SOURCE/$FEDORA_RAW_FILE -O rawhide.raw.xz
+          xz -vv --decompress rawhide.raw.xz
+          uname -m
+      - name: Execute build
+        run: |
+          set -ex -o pipefail
+          sudo -E ./all.sh

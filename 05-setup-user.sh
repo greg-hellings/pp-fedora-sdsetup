@@ -31,7 +31,11 @@ infecho "I didn't test this so it might also cause WWIII or something."
 infecho "I'm not responsible for anything that happens, you should read the script first."
 echo "=== WARNING WARNING WARNING ==="
 echo
-read -p "Continue? [y/N] " -n 1 -r
+if [ ! -z "$PS1" ]; then
+    read -p "Continue? [y/N] " -n 1 -r
+else
+    REPLY=y
+fi
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -43,7 +47,7 @@ then
     mkdir -p rootfs/boot
     mount $PP_PARTA rootfs/boot
 
-    if [[ $HOSTARCH -ne "aarch64" ]]; then
+    if [[ $HOSTARCH != "aarch64" ]]; then
         infecho "Installing qemu in rootfs..."
         cp /usr/bin/qemu-aarch64-static rootfs/usr/bin
     fi
@@ -57,12 +61,16 @@ then
     infecho "Copy resolv.conf /etc/tmp-resolv.conf"
     cp /etc/resolv.conf rootfs/etc/tmp-resolv.conf
 
-    if [[ $HOSTARCH -ne "aarch64" ]]; then
+    if [[ $HOSTARCH != "aarch64" ]]; then
         infecho "Chrooting with qemu into rootfs..."
-        chroot rootfs qemu-aarch64-static /bin/bash /root/all.sh
+        systemd-nspawn -D rootfs qemu-aarch64-static /bin/bash /root/all.sh
+        #chroot rootfs qemu-aarch64-static /bin/bash /root/all.sh
 
         infecho "KILLING ALL QEMU PROCESSES, MAKE SURE YOU HAVE NO MORE RUNNING!"
         killall -9 /usr/bin/qemu-aarch64-static
+
+        infecho "Removing qemu binary, so it doesn't stay in image"
+        rm rootfs/usr/bin/qemu-aarch64-static
     else
         infecho "Chrooting into rootfs..."
         chroot rootfs /bin/bash /root/all.sh

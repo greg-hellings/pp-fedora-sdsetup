@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex -o pipefail
 
 echo "======================"
 echo "01-create-sudo-user.sh"

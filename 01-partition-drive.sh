@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 source .env
 
@@ -23,11 +23,15 @@ fi
 
 # Warning
 echo "=== WARNING WARNING WARNING ==="
-infecho "This script will mount to /dev/loop1."
+infecho "This script will mount to ${PP_IMAGE}."
 infecho "Make sure nothing else is mounted there: lsblk"
 echo "=== WARNING WARNING WARNING ==="
 echo
-read -p "Continue? [y/N] " -n 1 -r
+if [ ! -z "$PS1" ]; then
+    read -p "Continue? [y/N] " -n 1 -r
+else
+    REPLY=y
+fi
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
@@ -41,9 +45,9 @@ unit: sectors
 EOF
     infecho "Image partitioned!"
 
-    infecho "Mounting the image to loop1..."
-    losetup /dev/loop1 fedora.img
-    partprobe -s /dev/loop1
+    infecho "Mounting the image to ${PP_IMAGE}..."
+    losetup "${PP_IMAGE}" fedora.img
+    partprobe -s "${PP_IMAGE}"
 
     infecho "Beginning filesystem creation..."
     infecho "If this fails, you might need to install mkfs.btrfs."
