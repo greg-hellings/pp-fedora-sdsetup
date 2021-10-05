@@ -46,4 +46,5 @@ infecho "Making COPR higher priority for kernel updates..."
 echo "priority=10" >> /etc/yum.repos.d/_copr\:copr.fedorainfracloud.org\:njha\:mobile.repo
 
 infecho "Upgrading packages..."
-dnf -y upgrade
+# TODO: Uncomment this after testing is done
+#dnf -y upgrade

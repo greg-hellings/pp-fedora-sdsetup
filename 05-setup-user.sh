@@ -60,7 +60,6 @@ then
     if [[ $HOSTARCH != "aarch64" ]]; then
         infecho "Chrooting with qemu into rootfs..."
         systemd-nspawn -D rootfs qemu-aarch64-static /bin/bash /root/all.sh
-        #chroot rootfs qemu-aarch64-static /bin/bash /root/all.sh
 
         infecho "KILLING ALL QEMU PROCESSES, MAKE SURE YOU HAVE NO MORE RUNNING!"
         killall -9 /usr/bin/qemu-aarch64-static
@@ -76,4 +75,5 @@ then
     sleep 3
     umount $PP_PARTB
     rmdir rootfs
+    df -h
 fi
