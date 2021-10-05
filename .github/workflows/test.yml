@@ -32,13 +32,14 @@ jobs:
       - name: Download files
         run: |
           set -ex -o pipefail
-          source .env
-          wget https://xff.cz/kernels/5.13/pp.tar.gz -O pp.tar.gz
-          tar xf pp.tar.gz
-          FEDORA_RAW_VER=$(wget -q $FEDORA_RAW_SOURCE -O - | grep -Po '(?<=Fedora-Minimal-Rawhide-).*?(?=.aarch64)' | head -n 1)
-          FEDORA_RAW_FILE=Fedora-Minimal-Rawhide-$FEDORA_RAW_VER.aarch64.raw.xz
-          wget $FEDORA_RAW_SOURCE/$FEDORA_RAW_FILE -O rawhide.raw.xz
-          xz -vv --decompress rawhide.raw.xz
+          ./download-files.sh
+          #source .env
+          #wget https://xff.cz/kernels/5.13/pp.tar.gz -O pp.tar.gz
+          #tar xf pp.tar.gz
+          #FEDORA_RAW_VER=$(wget -q $FEDORA_RAW_SOURCE -O - | grep -Po '(?<=Fedora-Minimal-Rawhide-).*?(?=.aarch64)' | head -n 1)
+          #FEDORA_RAW_FILE=Fedora-Minimal-Rawhide-$FEDORA_RAW_VER.aarch64.raw.xz
+          #wget $FEDORA_RAW_SOURCE/$FEDORA_RAW_FILE -O rawhide.raw.xz
+          #xz -vv --decompress rawhide.raw.xz
           uname -m
       - name: Execute build
         run: |
