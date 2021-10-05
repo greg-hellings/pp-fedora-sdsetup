@@ -45,6 +45,8 @@ jobs:
           if-no-files-found: error
 
   release:
+    needs:
+      - build  # Can only run after the build has created the artifact
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     steps:
