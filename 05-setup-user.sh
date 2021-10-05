@@ -54,10 +54,6 @@ then
 
     cp phone-scripts/* rootfs/root
 
-    infecho "Mounting your /dev into the rootfs..."
-    infecho "This is neccesary for dnf to work, because reasons."
-    mount --bind /dev rootfs/dev
-    
     infecho "Copy resolv.conf /etc/tmp-resolv.conf"
     cp /etc/resolv.conf rootfs/etc/tmp-resolv.conf
 
@@ -75,10 +71,6 @@ then
         infecho "Chrooting into rootfs..."
         chroot rootfs /bin/bash /root/all.sh
     fi
-
-    infecho "Unmounting your /dev from the rootfs..."
-    sleep 3
-    umount rootfs/dev
 
     infecho "Unmounting rootfs..."
     sleep 3
