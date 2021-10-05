@@ -47,4 +47,5 @@ echo "priority=10" >> /etc/yum.repos.d/_copr\:copr.fedorainfracloud.org\:njha\:m
 
 infecho "Upgrading packages..."
 # TODO: Uncomment this after testing is done
+dnf -y upgrade fedora-gpg-keys fedora-repos fedora-repos-modular fedora-repos-rawhide fedora-repos-rawhide-modular
 #dnf -y upgrade
