@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 echo "==================="
 echo "02-install-packages.sh"
@@ -29,6 +29,11 @@ infecho "THIS WILL FAIL, DON'T WORRY ITS PROBABLY OK"
 dnf -y remove kernel || rpm -e --noscripts kernel-core
 dnf -y install linux-firmware
 
+infecho "Upgrading packages..."
+# TODO: Uncomment this after testing is done
+dnf -y upgrade fedora-gpg-keys fedora-repos fedora-repos-modular fedora-repos-rawhide fedora-repos-rawhide-modular
+#dnf -y upgrade
+
 infecho "Installing recommended packages..."
 dnf -y install megi-kernel feedbackd phoc phosh squeekboard gnome-shell ModemManager rtl8723cs-firmware \
     dbus-x11 chatty calls carbons purple-mm-sms pinephone-helpers evolution-data-server \
@@ -44,8 +49,3 @@ systemctl set-default graphical.target
 
 infecho "Making COPR higher priority for kernel updates..."
 echo "priority=10" >> /etc/yum.repos.d/_copr\:copr.fedorainfracloud.org\:njha\:mobile.repo
-
-infecho "Upgrading packages..."
-# TODO: Uncomment this after testing is done
-dnf -y upgrade fedora-gpg-keys fedora-repos fedora-repos-modular fedora-repos-rawhide fedora-repos-rawhide-modular
-#dnf -y upgrade
