@@ -62,10 +62,10 @@ then
         systemd-nspawn -D rootfs qemu-aarch64-static /bin/bash /root/all.sh
 
         infecho "KILLING ALL QEMU PROCESSES, MAKE SURE YOU HAVE NO MORE RUNNING!"
-        killall -9 /usr/bin/qemu-aarch64-static
+        killall -9 /usr/bin/qemu-aarch64-static || true
 
         infecho "Removing qemu binary, so it doesn't stay in image"
-        rm rootfs/usr/bin/qemu-aarch64-static
+        rm -f rootfs/usr/bin/qemu-aarch64-static
     else
         infecho "Chrooting into rootfs..."
         chroot rootfs /bin/bash /root/all.sh
