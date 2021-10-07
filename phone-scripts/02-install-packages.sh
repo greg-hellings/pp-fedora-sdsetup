@@ -29,14 +29,12 @@ infecho "THIS WILL FAIL, DON'T WORRY ITS PROBABLY OK"
 dnf -y remove kernel || rpm -e --noscripts kernel-core
 dnf -y install linux-firmware
 
-infecho "Upgrading packages..."
-dnf -y upgrade
-
+# Firefox is currently causing problems with Cisco H.264 RPMs
 infecho "Installing recommended packages..."
 dnf -y install megi-kernel feedbackd phoc phosh squeekboard gnome-shell ModemManager rtl8723cs-firmware \
     dbus-x11 chatty calls carbons purple-mm-sms pinephone-helpers evolution-data-server \
     f34-backgrounds-gnome epiphany gnome-contacts NetworkManager-wwan \
-    firefox nautilus megapixels gnome-power-manager gnome-usage xdg-user-dirs pipewire-alsa alsa-ucm-utils \
+    nautilus megapixels gnome-power-manager gnome-usage xdg-user-dirs pipewire-alsa alsa-ucm-utils \
     pp-uboot wlr-randr gnome-terminal gnome-clocks wireplumber
 
 infecho "Enabling graphical boot and Phosh..."
@@ -47,3 +45,6 @@ systemctl set-default graphical.target
 
 infecho "Making COPR higher priority for kernel updates..."
 echo "priority=10" >> /etc/yum.repos.d/_copr\:copr.fedorainfracloud.org\:njha\:mobile.repo
+
+infecho "Upgrading packages..."
+dnf -y upgrade
