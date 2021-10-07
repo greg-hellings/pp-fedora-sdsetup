@@ -30,9 +30,7 @@ dnf -y remove kernel || rpm -e --noscripts kernel-core
 dnf -y install linux-firmware
 
 infecho "Upgrading packages..."
-# TODO: Uncomment this after testing is done
-dnf -y upgrade fedora-gpg-keys fedora-repos fedora-repos-modular fedora-repos-rawhide fedora-repos-rawhide-modular
-#dnf -y upgrade
+dnf -y upgrade
 
 infecho "Installing recommended packages..."
 dnf -y install megi-kernel feedbackd phoc phosh squeekboard gnome-shell ModemManager rtl8723cs-firmware \
