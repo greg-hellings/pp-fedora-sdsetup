@@ -37,12 +37,11 @@ jobs:
         run: |
           set -ex -o pipefail
           sudo -E ./all.sh
-          xz fedora.img
       - name: Store fedora.img as an artifact
         uses: actions/upload-artifact@v2
         with:
           name: image
-          path: fedora.img.xz
+          path: fedora.img
           if-no-files-found: error
 
   release:
@@ -51,14 +50,14 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     steps:
-      - name: Download fedora.img.xz
+      - name: Download fedora.img
         uses: actions/download-artifact@v2
         with:
           name: image
       - name: Upload files to release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: fedora.img.xz
+          artifacts: fedora.img
           allowUpdates: true
           name: ${{ github.event.name }}
           token: ${{ secrets.GITHUB_TOKEN }}
