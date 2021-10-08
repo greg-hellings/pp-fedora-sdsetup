@@ -37,11 +37,14 @@ jobs:
         run: |
           set -ex -o pipefail
           sudo -E ./all.sh
-      - name: Store fedora.img as an artifact
+          # Compress image
+          sudo chown "${USER}" fedora.img
+          xz fedora.img
+      - name: Store fedora.img.xz as an artifact
         uses: actions/upload-artifact@v2
         with:
           name: image
-          path: fedora.img
+          path: fedora.img.xz
           if-no-files-found: error
 
   release:
@@ -50,12 +53,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'release'
     steps:
-      - name: Download fedora.img
+      - name: Download fedora.img.xz
         uses: actions/download-artifact@v2
         with:
           name: image
-      - name: Zip final image
-        run: xz fedora.img
       - name: Upload files to release
         uses: ncipollo/release-action@v1
         with:
