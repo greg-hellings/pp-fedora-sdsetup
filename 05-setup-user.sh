@@ -73,6 +73,7 @@ then
 
     infecho "Unmounting rootfs..."
     sleep 3
+    umount $PP_PARTA
     umount $PP_PARTB
     rmdir rootfs
     df -h
